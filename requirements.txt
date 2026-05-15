@@ -1,24 +1,49 @@
-torch==2.0.0
-torchvision==0.15.0
-torchmetrics==0.11.4
-pydicom==2.3.1
-SimpleITK==2.2.1
-nibabel==4.0.2
+# requirements.txt - 修复版本
+
+# ========== 核心 ML/DL 库 ==========
+#torch==2.0.1
+#torchvision==...
+#torchaudio==2.0.2
+
+# ========== API 框架 ==========
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+python-multipart==0.0.6
+
+# ========== 数据处理与图像处理 ==========
 numpy==1.24.3
-pandas==1.5.3
-scikit-learn==1.2.2
-scikit-image==0.20.0
-opencv-python==4.7.0.72
-Pillow==9.5.0
-matplotlib==3.7.1
-seaborn==0.12.2
-plotly==5.14.0
-tqdm==4.65.0
-PyYAML==6.0
+opencv-python==4.8.1.78
+Pillow==10.1.0
+pydicom==2.4.0
+pandas==2.1.3
+scipy==1.11.4
+
+# ========== 机器学习工具 ==========
+scikit-learn==1.3.2
+scikit-image==0.22.0
+
+# ========== 模型导出与推理 ==========
+onnx==1.14.1
+onnxruntime==1.16.3
+
+# ========== 配置管理 ==========
+pyyaml==6.0.1
 python-dotenv==1.0.0
-jupyter==1.0.0
-ipywidgets==8.0.6
-tensorboard==2.13.0
-gputil==1.4.0
-pytest==7.3.1
+
+# ========== 工具库 ==========
+tqdm==4.66.1
+requests==2.31.0
+aiofiles==23.2.1
+python-dateutil==2.8.2
+
+# ========== 日志与监控 ==========
+loguru==0.7.2
+
+# ========== 开发工具（可选） ==========
+pytest==7.4.3
 pytest-cov==4.1.0
+black==23.12.0
+flake8==6.1.0
+isort==5.13.2

@@ -31,17 +31,24 @@ class MetricsCalculator:
         ground_truth = np.array(self.ground_truth)
         probabilities = np.array(self.probabilities)
 
+        num_classes = len(np.unique(ground_truth)) if ground_truth.size else 0
+        is_binary = num_classes == 2
+
+        avg = 'binary' if is_binary else 'macro'
+
         metrics = {
             'accuracy': accuracy_score(ground_truth, predictions),
-            'precision': precision_score(ground_truth, predictions, zero_division=0),
-            'recall': recall_score(ground_truth, predictions, zero_division=0),
-            'f1': f1_score(ground_truth, predictions, zero_division=0),
-            'specificity': self._calculate_specificity(ground_truth, predictions),
-            'sensitivity': recall_score(ground_truth, predictions, zero_division=0),
+            'precision': precision_score(ground_truth, predictions, zero_division=0, average=avg),
+            'recall': recall_score(ground_truth, predictions, zero_division=0, average=avg),
+            'f1': f1_score(ground_truth, predictions, zero_division=0, average=avg),
         }
 
-        if len(np.unique(ground_truth)) == 2:
-            metrics['auc_roc'] = roc_auc_score(ground_truth, probabilities)
+        # Binary-only metrics
+        if is_binary:
+            metrics['specificity'] = self._calculate_specificity(ground_truth, predictions)
+            metrics['sensitivity'] = recall_score(ground_truth, predictions, zero_division=0, average='binary')
+            if probabilities.size:
+                metrics['auc_roc'] = roc_auc_score(ground_truth, probabilities)
 
         metrics['confusion_matrix'] = confusion_matrix(ground_truth, predictions)
         metrics['classification_report'] = classification_report(
@@ -66,8 +73,10 @@ class MetricsCalculator:
         print(f"Precision:    {metrics['precision']:.4f}")
         print(f"Recall:       {metrics['recall']:.4f}")
         print(f"F1-Score:     {metrics['f1']:.4f}")
-        print(f"Specificity:  {metrics['specificity']:.4f}")
-        print(f"Sensitivity:  {metrics['sensitivity']:.4f}")
+        if "specificity" in metrics:
+            print(f"Specificity:  {metrics['specificity']:.4f}")
+        if "sensitivity" in metrics:
+            print(f"Sensitivity:  {metrics['sensitivity']:.4f}")
         if 'auc_roc' in metrics:
             print(f"AUC-ROC:      {metrics['auc_roc']:.4f}")
         print("="*50 + "\n")

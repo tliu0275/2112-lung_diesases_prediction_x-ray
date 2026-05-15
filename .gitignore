@@ -80,3 +80,4 @@ tensorboard/
 
 # OS
 Thumbs.db
+.venv/

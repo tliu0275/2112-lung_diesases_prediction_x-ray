@@ -1,0 +1,58 @@
+# Model Configuration
+model:
+  model_type: multi_task  # multi_task: class + severity; binary: single-head only
+  name: densenet121
+  num_classes: 3
+  severity_classes: 5
+  pretrained: true
+  # Tabular fusion: 0 = image-only. Use 3 for [age/100, male, female] (+ optional extras below).
+  tabular_dim: 0
+
+# Data Configuration
+data:
+  data_dir: "folder_3"
+  csv_file: null
+  # Optional CSV with columns: image_name (or filename), age, gender, severity, plus any numeric extras.
+  metadata_csv: null
+  tabular_extra_columns: []
+  image_size: 224
+  train_split: 0.7
+  val_split: 0.15
+  test_split: 0.15
+  augment_train: true
+  num_workers: 4
+  seed: 42
+  # auto: synthesize severity bins if not in CSV/metadata (needed for multi_task training).
+  severity_strategy: auto
+  synthetic_severity_by_class: null
+
+# Training Configuration
+training:
+  batch_size: 32
+  learning_rate: 0.001
+  weight_decay: 1e-5
+  num_epochs: 50
+  early_stopping_patience: 10
+  gradient_clip_max_norm: 1.0
+  mixed_precision: true
+  loss_weights:
+    classification: 0.6
+    severity_prediction: 0.4
+
+# Evaluation Configuration
+evaluation:
+  eval_freq: 5
+
+# Paths
+paths:
+  checkpoint_dir: checkpoints/
+  log_dir: logs/
+  output_dir: outputs/
+
+# Inference Configuration
+inference:
+  class_display_names:
+    - Normal
+    - Virus Pneumonia
+    - Bacteria Pneumonia
+  severity_bin_centers: [10, 30, 50, 70, 90]

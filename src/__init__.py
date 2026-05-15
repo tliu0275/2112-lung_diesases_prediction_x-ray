@@ -1,1 +1,0 @@
-"""Medical Image Analysis Package for Pneumonia Detection"""
